@@ -2,6 +2,8 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
 
+import setSecretBurritos from './secretBurrito';
+
 const networkInterface = createNetworkInterface({ uri: 'http://localhost:3030/graphql' });
 
 networkInterface.use([{
@@ -19,4 +21,8 @@ export const client = new ApolloClient({
 });
 
 
-export const rootReducer = combineReducers({ routing: routerReducer, apollo: client.reducer() });
+export const rootReducer = combineReducers({ 
+  routing: routerReducer, 
+  apollo: client.reducer(),
+  secretBurritos: setSecretBurritos
+});

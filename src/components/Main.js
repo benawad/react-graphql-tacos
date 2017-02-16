@@ -59,6 +59,23 @@ mutation {
 }
 `;
 
+const updateSecretBurritosMutation = gql`
+mutation {
+	updateSecretBurritos(size: "huge") {
+    secretBurrito {
+      _id
+      size
+    }
+    user {
+      secretBurritos {
+        _id
+        size
+      }
+    }
+  }
+}
+`;
+
 const loggin = graphql(logginMutation, {
   props: ({ ownProps, mutate }) => ({
     loggin(email, password) {
@@ -116,9 +133,22 @@ const createSecretBurrito = graphql(createSecretBurritoMutation, {
   }),
 });
 
+const updateSecretBurritos = graphql(updateSecretBurritosMutation, {
+  props: ({ ownProps, mutate }) => ({
+    updateSecretBurritos() {
+      return mutate()
+      .then((result) => {
+        ownProps.setSecretBurritos(result);
+        console.log(result);
+      });
+    },
+  }),
+});
+
 export default compose(
   loggin,
   signup,
   createTaco,
   createSecretBurrito,
+  updateSecretBurritos
 )(Main);

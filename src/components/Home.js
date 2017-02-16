@@ -18,11 +18,16 @@ class Home extends Component {
   }
 
   handleBurritoButton() {
-    this.props.createSecretBurrito();
-    this.props.secretBurritos.refetch();
+    this.props.updateSecretBurritos();
+    this.props.initSecretBurritos.refetch();
   }
 
   render() {
+    const { initSecretBurritos } = this.props;
+    let secretBurritos = [];
+    if (initSecretBurritos.viewer) {
+      secretBurritos = initSecretBurritos.viewer.secretBurritos;
+    }
     return (
       <Grid>
         <Grid.Row>
@@ -35,11 +40,11 @@ class Home extends Component {
             </pre>
           </Grid.Column>
           <Grid.Column width={8}>
-            <Button onClick={() => this.props.createSecretBurrito()} fluid>
+            <Button onClick={this.handleBurritoButton} fluid>
               Create Secret Burrito
             </Button>
             <pre>
-              {JSON.stringify(this.props.tacos.allTacos, null, 2)}
+              {JSON.stringify(secretBurritos, null, 2)}
             </pre>
           </Grid.Column>
         </Grid.Row>
@@ -83,8 +88,9 @@ const getTacos = graphql(getTacosQuery, {
 });
 
 const getSecretBurritos = graphql(getSecretBurritosQuery, {
+  options: { forceFetch: true },
   props: ({ data }) => ({
-    secretBurritos: data,
+    initSecretBurritos: data,
   }),
 });
 
