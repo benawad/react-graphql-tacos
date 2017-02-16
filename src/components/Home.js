@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Button } from 'semantic-ui-react';
 
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 
 class Home extends Component {
@@ -30,11 +30,17 @@ class Home extends Component {
             <Button onClick={this.handleTacoButton} fluid>
               Create Taco
             </Button>
+            <pre>
+              {JSON.stringify(this.props.tacos.allTacos, null, 2)}
+            </pre>
           </Grid.Column>
           <Grid.Column width={8}>
             <Button onClick={() => this.props.createSecretBurrito()} fluid>
               Create Secret Burrito
             </Button>
+            <pre>
+              {JSON.stringify(this.props.tacos.allTacos, null, 2)}
+            </pre>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
@@ -48,7 +54,7 @@ class Home extends Component {
 
 const getTacosQuery = gql`
 {
-  tacos(meat: "chicken") {
+  allTacos {
     _id
     meat
     cheese
@@ -57,11 +63,32 @@ const getTacosQuery = gql`
 }
 `;
 
+const getSecretBurritosQuery = gql`
+{
+  viewer {
+    _id
+    email
+    secretBurritos {
+      _id
+      size
+    }
+  }
+}
+`;
+
 const getTacos = graphql(getTacosQuery, {
-  options: { forceFetch: true },
   props: ({ data }) => ({
     tacos: data,
   }),
 });
 
-export default getTacos(Home);
+const getSecretBurritos = graphql(getSecretBurritosQuery, {
+  props: ({ data }) => ({
+    secretBurritos: data,
+  }),
+});
+
+export default compose(
+  getTacos,
+  getSecretBurritos
+)(Home);

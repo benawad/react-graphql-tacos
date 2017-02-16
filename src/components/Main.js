@@ -59,17 +59,6 @@ mutation {
 }
 `;
 
-const getAllTacosQuery = gql`
-{
-  allTacos {
-    _id
-    meat
-    cheese
-    salsa
-  }
-}
-`;
-
 const loggin = graphql(logginMutation, {
   props: ({ ownProps, mutate }) => ({
     loggin(email, password) {
@@ -127,14 +116,9 @@ const createSecretBurrito = graphql(createSecretBurritoMutation, {
   }),
 });
 
-const getAllTacos = graphql(getAllTacosQuery, {
-  name: 'AllTacos',
-});
-
 export default compose(
   loggin,
   signup,
   createTaco,
   createSecretBurrito,
-  getAllTacos,
 )(Main);
