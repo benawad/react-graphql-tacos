@@ -1,0 +1,17 @@
+{
+    "extends": "airbnb",
+    "plugins": [
+        "react",
+        "jsx-a11y",
+        "import"
+    ],
+    "rules": {
+      "react/jsx-filename-extension": 0,
+      "no-param-reassign": ["error", { "props": false }]
+    },
+    "globals": {
+      "document": true,
+      "window": true,
+      "localStorage": true
+    }
+}
