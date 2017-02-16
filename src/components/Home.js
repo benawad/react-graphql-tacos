@@ -18,16 +18,23 @@ class Home extends Component {
   }
 
   handleBurritoButton() {
-    this.props.updateSecretBurritos();
+    this.props.createSecretBurrito();
     this.props.initSecretBurritos.refetch();
   }
 
   render() {
-    const { initSecretBurritos } = this.props;
+    const { tacos, initSecretBurritos } = this.props;
+
     let secretBurritos = [];
     if (initSecretBurritos.viewer) {
       secretBurritos = initSecretBurritos.viewer.secretBurritos;
     }
+    
+    let tacoList = [];
+    if (tacos.allTacos) {
+      tacoList = tacos.allTacos;
+    }
+
     return (
       <Grid>
         <Grid.Row>
@@ -35,14 +42,16 @@ class Home extends Component {
             <Button onClick={this.handleTacoButton} fluid>
               Create Taco
             </Button>
+            <h3>{tacoList.length}</h3>
             <pre>
-              {JSON.stringify(this.props.tacos.allTacos, null, 2)}
+              {JSON.stringify(tacoList, null, 2)}
             </pre>
           </Grid.Column>
           <Grid.Column width={8}>
             <Button onClick={this.handleBurritoButton} fluid>
               Create Secret Burrito
             </Button>
+            <h3>{secretBurritos.length}</h3>
             <pre>
               {JSON.stringify(secretBurritos, null, 2)}
             </pre>
