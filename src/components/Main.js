@@ -13,7 +13,7 @@ class Main extends Component {
     return (
       <Container text>
         <Header as="h1" textAlign="center">
-          <Link to="/">Title</Link>
+          <Link to="/">GraphQL</Link>
         </Header>
         {React.cloneElement(this.props.children, this.props)}
       </Container>
@@ -55,23 +55,6 @@ mutation {
   createSecretBurrito(size: "huge") {
     _id
     size
-  }
-}
-`;
-
-const updateSecretBurritosMutation = gql`
-mutation {
-	updateSecretBurritos(size: "huge") {
-    secretBurrito {
-      _id
-      size
-    }
-    user {
-      secretBurritos {
-        _id
-        size
-      }
-    }
   }
 }
 `;
@@ -133,22 +116,9 @@ const createSecretBurrito = graphql(createSecretBurritoMutation, {
   }),
 });
 
-const updateSecretBurritos = graphql(updateSecretBurritosMutation, {
-  props: ({ ownProps, mutate }) => ({
-    updateSecretBurritos() {
-      return mutate()
-      .then((result) => {
-        ownProps.setSecretBurritos(result);
-        console.log(result);
-      });
-    },
-  }),
-});
-
 export default compose(
   loggin,
   signup,
   createTaco,
   createSecretBurrito,
-  updateSecretBurritos
 )(Main);
