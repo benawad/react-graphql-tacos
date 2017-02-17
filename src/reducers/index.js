@@ -21,8 +21,8 @@ export const client = new ApolloClient({
 });
 
 
-export const rootReducer = combineReducers({ 
-  routing: routerReducer, 
+export const rootReducer = combineReducers({
+  routing: routerReducer,
   apollo: client.reducer(),
-  secretBurritos: setSecretBurritos
+  secretBurritos: setSecretBurritos,
 });

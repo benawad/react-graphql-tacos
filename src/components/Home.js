@@ -29,7 +29,7 @@ class Home extends Component {
     if (initSecretBurritos.viewer) {
       secretBurritos = initSecretBurritos.viewer.secretBurritos;
     }
-    
+
     let tacoList = [];
     if (tacos.allTacos) {
       tacoList = tacos.allTacos;
@@ -105,5 +105,5 @@ const getSecretBurritos = graphql(getSecretBurritosQuery, {
 
 export default compose(
   getTacos,
-  getSecretBurritos
+  getSecretBurritos,
 )(Home);
