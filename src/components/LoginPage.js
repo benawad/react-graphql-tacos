@@ -15,7 +15,7 @@ class LoginPage extends Component {
   }
 
   handleSubmit(e) {
-    this.props.loggin(this.state.username, this.state.password);
+    this.props.login(this.state.username, this.state.password);
     e.preventDefault();
     this.setState({ username: '', password: '' });
   }
@@ -48,9 +48,9 @@ class LoginPage extends Component {
   }
 }
 
-const logginMutation = gql`
+const loginMutation = gql`
 mutation ($email: String!, $password: String!) {
-  loggin(email: $email, password: $password) {
+  login(email: $email, password: $password) {
     token
     data {
       secretBurritos {
@@ -61,9 +61,9 @@ mutation ($email: String!, $password: String!) {
 }
 `;
 
-const loggin = graphql(logginMutation, {
+const login = graphql(loginMutation, {
   props: ({ ownProps, mutate }) => ({
-    loggin(email, password) {
+    login(email, password) {
       return mutate({
         variables: {
           email,
@@ -71,7 +71,7 @@ const loggin = graphql(logginMutation, {
         },
       })
       .then(({ data }) => {
-        window.localStorage.token = data.loggin.token;
+        window.localStorage.token = data.login.token;
         // todo: add to redux store
         browserHistory.push('/');
         ownProps.secretBurritos = data;
@@ -80,4 +80,4 @@ const loggin = graphql(logginMutation, {
   }),
 });
 
-export default loggin(LoginPage);
+export default login(LoginPage);
