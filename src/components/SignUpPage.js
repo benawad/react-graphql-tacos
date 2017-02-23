@@ -3,7 +3,7 @@ import { Button, Form } from 'semantic-ui-react';
 
 import { browserHistory } from 'react-router';
 
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
 class SignUpPage extends Component {
