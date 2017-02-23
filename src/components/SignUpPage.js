@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { Button, Form } from 'semantic-ui-react';
 
+import { browserHistory } from 'react-router';
+
+import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
+
 class SignUpPage extends Component {
 
   constructor(props) {
@@ -43,4 +48,28 @@ class SignUpPage extends Component {
   }
 }
 
-export default SignUpPage;
+const signupMutation = gql`
+mutation ($email: String!, $password: String!) {
+  signUp(email: $email, password: $password) {
+    _id
+  }
+}
+`;
+
+const signup = graphql(signupMutation, {
+  props: ({ ownProps, mutate }) => ({
+    signup(email, password) {
+      return mutate({
+        variables: {
+          email,
+          password,
+        },
+      })
+      .then((result) => {
+        browserHistory.push('/login');
+      });
+    },
+  }),
+});
+
+export default signup(SignUpPage);

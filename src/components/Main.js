@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { Header, Container } from 'semantic-ui-react';
 
-import { browserHistory } from 'react-router';
-
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -21,25 +19,6 @@ class Main extends Component {
   }
 }
 
-const logginMutation = gql`
-mutation ($email: String!, $password: String!) {
-  loggin(email: $email, password: $password) {
-    token
-    data {
-      secretBurritos {
-        size
-      }
-    }
-  }
-}
-`;
-const signUpMutation = gql`
-mutation ($email: String!, $password: String!) {
-  signUp(email: $email, password: $password) {
-    _id
-  }
-}
-`;
 const createTacoMutation = gql`
 mutation {
   createTaco(meat: "chicken", cheese: "cheddar", salsa: "hot") {
@@ -59,40 +38,7 @@ mutation {
 }
 `;
 
-const loggin = graphql(logginMutation, {
-  props: ({ ownProps, mutate }) => ({
-    loggin(email, password) {
-      return mutate({
-        variables: {
-          email,
-          password,
-        },
-      })
-      .then(({ data }) => {
-        window.localStorage.token = data.loggin.token;
-        // todo: add to redux store
-        browserHistory.push('/');
-        ownProps.secretBurritos = data;
-      });
-    },
-  }),
-});
 
-const signup = graphql(signUpMutation, {
-  props: ({ ownProps, mutate }) => ({
-    signup(email, password) {
-      return mutate({
-        variables: {
-          email,
-          password,
-        },
-      })
-      .then((result) => {
-        browserHistory.push('/login');
-      });
-    },
-  }),
-});
 
 const createTaco = graphql(createTacoMutation, {
   props: ({ ownProps, mutate }) => ({
@@ -117,8 +63,6 @@ const createSecretBurrito = graphql(createSecretBurritoMutation, {
 });
 
 export default compose(
-  loggin,
-  signup,
   createTaco,
   createSecretBurrito,
 )(Main);

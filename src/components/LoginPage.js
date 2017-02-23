@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { Button, Form } from 'semantic-ui-react';
 
+import { browserHistory } from 'react-router';
+
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+
 class LoginPage extends Component {
 
   constructor(props) {
@@ -43,4 +48,36 @@ class LoginPage extends Component {
   }
 }
 
-export default LoginPage;
+const logginMutation = gql`
+mutation ($email: String!, $password: String!) {
+  loggin(email: $email, password: $password) {
+    token
+    data {
+      secretBurritos {
+        size
+      }
+    }
+  }
+}
+`;
+
+const loggin = graphql(logginMutation, {
+  props: ({ ownProps, mutate }) => ({
+    loggin(email, password) {
+      return mutate({
+        variables: {
+          email,
+          password,
+        },
+      })
+      .then(({ data }) => {
+        window.localStorage.token = data.loggin.token;
+        // todo: add to redux store
+        browserHistory.push('/');
+        ownProps.secretBurritos = data;
+      });
+    },
+  }),
+});
+
+export default loggin(LoginPage);
